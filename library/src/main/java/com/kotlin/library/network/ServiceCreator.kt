@@ -3,6 +3,10 @@ package com.kotlin.library.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * 创建网络服务
+ * @author llw
+ */
 object ServiceCreator {
 
     private fun getBaseUrl(type: Int): String? = when (type) {
