@@ -1,10 +1,10 @@
 package com.kotlin.weather.api
 
+import AirNowResponse
+import HourlyResponse
 import androidx.lifecycle.liveData
 import com.kotlin.library.util.Constant.SUCCESS_CODE
-import com.kotlin.weather.model.DailyResponse
-import com.kotlin.weather.model.NowResponse
-import com.kotlin.weather.model.SearchCityResponse
+import com.kotlin.weather.model.*
 import kotlinx.coroutines.Dispatchers
 import java.lang.RuntimeException
 
@@ -32,6 +32,24 @@ object Repository {
     }
 
     /**
+     * 灾害预警
+     */
+    fun nowWarn(cityId: String) = liveData(Dispatchers.IO) {
+        val result = try {
+            val warningResponse = RequestNetwork.nowWarn(cityId)
+            if (warningResponse.code == SUCCESS_CODE) {
+                Result.success(warningResponse)
+            } else {
+                Result.failure(RuntimeException("response code is ${warningResponse.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure<WarningResponse>(e)
+        }
+        emit(result)
+    }
+
+
+    /**
      * 实时天气
      */
     fun nowWeather(cityId: String) = liveData(Dispatchers.IO) {
@@ -49,6 +67,23 @@ object Repository {
     }
 
     /**
+     * 实时天气
+     */
+    fun hourlyWeather(cityId: String) = liveData(Dispatchers.IO) {
+        val result = try {
+            val hourlyResponse = RequestNetwork.hourlyWeather(cityId)
+            if (hourlyResponse.code == SUCCESS_CODE) {
+                Result.success(hourlyResponse)
+            } else {
+                Result.failure(RuntimeException("response code is ${hourlyResponse.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure<HourlyResponse>(e)
+        }
+        emit(result)
+    }
+
+    /**
      * 预报天气  3、7、10、15天
      */
     fun dailyWeather(type:String,cityId:String) = liveData(Dispatchers.IO) {
@@ -61,6 +96,40 @@ object Repository {
             }
         } catch (e: Exception) {
             Result.failure<DailyResponse>(e)
+        }
+        emit(result)
+    }
+
+    /**
+     * 当天空气质量
+     */
+    fun airNowWeather(cityId:String) = liveData(Dispatchers.IO) {
+        val result = try {
+            val airNowResponse = RequestNetwork.airNowWeather(cityId)
+            if (airNowResponse.code == SUCCESS_CODE) {
+                Result.success(airNowResponse)
+            } else {
+                Result.failure(RuntimeException("response code is ${airNowResponse.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure<AirNowResponse>(e)
+        }
+        emit(result)
+    }
+
+    /**
+     * 生活质量
+     */
+    fun lifestyle(type:String,cityId:String) = liveData(Dispatchers.IO) {
+        val result = try {
+            val lifestyleResponse = RequestNetwork.lifestyle(type,cityId)
+            if (lifestyleResponse.code == SUCCESS_CODE) {
+                Result.success(lifestyleResponse)
+            } else {
+                Result.failure(RuntimeException("response code is ${lifestyleResponse.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure<LifestyleResponse>(e)
         }
         emit(result)
     }

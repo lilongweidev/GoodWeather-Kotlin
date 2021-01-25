@@ -23,11 +23,23 @@ object RequestNetwork {
     //通过await()函数将searchCity()函数也声明成挂起函数。使用协程  搜索城市
     suspend fun searchCity(location: String) = searchCityService.searchCity(location).await()
 
+    //当前城市灾害预警
+    suspend fun nowWarn(cityId: String) = searchCityService.nowWarn(cityId).await()
+
     //获取实时天气
     suspend fun nowWeather(cityId: String) = weatherService.nowWeather(cityId).await()
 
+    //获取逐小时天气
+    suspend fun hourlyWeather(cityId: String) = weatherService.hourlyWeather(cityId).await()
+
     //获取预报天气 未来3天、7天、10天、15天
     suspend fun dailyWeather(type:String,cityId: String) = weatherService.dailyWeather(type,cityId).await()
+
+    //获取当前城市空气质量
+    suspend fun airNowWeather(cityId: String) = weatherService.airNowWeather(cityId).await()
+
+    //获取生活质量数据
+    suspend fun lifestyle(type: String,cityId: String) = weatherService.lifestyle(type, cityId).await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->
