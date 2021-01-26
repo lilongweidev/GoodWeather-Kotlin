@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:background="@mipmap/icon_add_bg_9"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_20">
+
+        <TextView
+            android:id="@+id/tvChangeCity"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="切换城市"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <TextView
+            android:id="@+id/tvWallpaper"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="壁纸管理"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <TextView
+            android:id="@+id/tvSearchCity"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="城市搜索"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <TextView
+            android:id="@+id/tvWorldCity"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="世界城市"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <TextView
+            android:id="@+id/tvResidentCity"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="常用城市"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <TextView
+            android:id="@+id/tvAboutUs"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="关于我们"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <TextView
+            android:id="@+id/tvSetting"
+            android:gravity="center"
+            android:layout_width="@dimen/dp_140"
+            android:layout_height="@dimen/dp_48"
+            android:text="应用设置"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+    </LinearLayout>
+
+</LinearLayout>

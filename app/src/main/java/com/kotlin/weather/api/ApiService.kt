@@ -26,7 +26,7 @@ interface ApiService {
     /**
      * 当前城市灾害预警
      *
-     * @param location 城市id ，通过搜索城市获得
+     * @param cityId 城市id ，通过搜索城市获得
      * @return WarningResponse 灾害预警返回
      */
     @GET("/v7/warning/now?key=$API_KEY")
@@ -42,9 +42,18 @@ interface ApiService {
     fun nowWeather(@Query("location") cityId: String): Call<NowResponse>
 
     /**
-     * 逐小时预报（未来24小时）之前是逐三小时预报
+     * 分钟级降水 最近两小时内
      *
-     * @param location 城市id
+     * @param lngLat 经纬度拼接字符串，使用英文逗号分隔,经度在前纬度在后
+     * @return
+     */
+    @GET("/v7/minutely/5m?key=$API_KEY")
+    fun minutePrec(@Query("location") lngLat: String): Call<MinutePrecResponse>
+
+    /**
+     * 逐小时预报（未来24小时）
+     *
+     * @param cityId 城市id
      * @return HourlyResponse 返回逐小时数据
      */
     @GET("/v7/weather/24h?key=$API_KEY")
@@ -61,7 +70,7 @@ interface ApiService {
     /**
      * 当天空气质量
      *
-     * @param location 城市id
+     * @param cityId 城市id
      * @return AirNowResponse 返回当天空气质量数据
      */
     @GET("/v7/air/now?key=$API_KEY")
@@ -74,7 +83,7 @@ interface ApiService {
      * 钓鱼指数	4 ，紫外线指数  5 ，旅游指数  6，花粉过敏指数	7，舒适度指数	8，
      * 感冒指数	9 ，空气污染扩散条件指数	10 ，空调开启指数	 11 ，太阳镜指数	12 ，
      * 化妆指数  13 ，晾晒指数  14 ，交通指数  15 ，防晒指数	16
-     * @param location 城市id
+     * @param cityId 城市id
      * @return LifestyleResponse 生活指数数据返回
      */
     @GET("/v7/indices/1d?key=$API_KEY")

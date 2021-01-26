@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.kotlin.weather.api.Repository
 import com.kotlin.weather.model.*
+import kotlin.math.ln
 
 class MainViewModel : ViewModel() {
 
@@ -14,6 +15,9 @@ class MainViewModel : ViewModel() {
 
     //天气  城市Id
     private val cityIdLiveData = MutableLiveData<String>()
+
+    //天气  分钟级降水
+    private val minuteLiveData = MutableLiveData<String>()
 
     //天气  逐小时天气
     private val hourlyLiveData = MutableLiveData<String>()
@@ -32,6 +36,8 @@ class MainViewModel : ViewModel() {
 
     val locationBean = ArrayList<LocationBean>()
 
+    val minutelyBean = ArrayList<MinutelyBean>()
+
     val dailyBean = ArrayList<DailyBean>()
 
     val hourlyBean = ArrayList<HourlyBean>()
@@ -49,6 +55,11 @@ class MainViewModel : ViewModel() {
     //被观察的实况天气返回数据
     val nowWeatherLiveData = Transformations.switchMap(cityIdLiveData) { cityId ->
         Repository.nowWeather(cityId)
+    }
+
+    //被观察的分钟级降水返回数据
+    val minutePrecLiveData = Transformations.switchMap(minuteLiveData){lngLat ->
+        Repository.minutePrec(lngLat)
     }
 
     //被观察的逐小时天气返回
@@ -84,6 +95,10 @@ class MainViewModel : ViewModel() {
     //实况天气
     fun nowWeather(cityId: String) {
         cityIdLiveData.value = cityId
+    }
+
+    fun minutePrec(lngLat:String){
+        minuteLiveData.value = lngLat
     }
 
     fun hourlyWeather(cityId: String){

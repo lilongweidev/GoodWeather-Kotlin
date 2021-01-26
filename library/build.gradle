@@ -56,6 +56,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //权限请求
     api 'com.permissionx.guolindev:permissionx:1.4.0'
+    //下拉刷新框架
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    //没有使用特殊Header，可以不加这行
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
 
 
 }

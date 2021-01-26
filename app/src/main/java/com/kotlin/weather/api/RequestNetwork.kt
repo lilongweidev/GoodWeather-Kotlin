@@ -29,6 +29,9 @@ object RequestNetwork {
     //获取实时天气
     suspend fun nowWeather(cityId: String) = weatherService.nowWeather(cityId).await()
 
+    //获取分钟级降水
+    suspend fun minutePrec(lngLat: String) = weatherService.minutePrec(lngLat).await()
+
     //获取逐小时天气
     suspend fun hourlyWeather(cityId: String) = weatherService.hourlyWeather(cityId).await()
 

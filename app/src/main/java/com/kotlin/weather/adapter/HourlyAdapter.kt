@@ -16,6 +16,7 @@ import com.kotlin.weather.R
  */
 class HourlyAdapter(layoutResId: Int, data: List<HourlyBean>?) :
     BaseQuickAdapter<HourlyBean, BaseViewHolder>(layoutResId, data) {
+
     override fun convert(helper: BaseViewHolder, item: HourlyBean) {
         val time = updateTime(item.fxTime)
         //时间

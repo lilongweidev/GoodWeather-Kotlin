@@ -7,26 +7,14 @@ package com.kotlin.weather.model
 data class SearchCityResponse(val code: String, val location: List<LocationBean>)
 
 data class LocationBean(
-    /**
-     * name : 南山
-     * id : 101280604
-     * lat : 22.53122
-     * lon : 113.92942
-     * adm2 : 深圳
-     * adm1 : 广东省
-     * country : 中国
-     * tz : Asia/Shanghai
-     * type : city
-     * rank : 25
-     */
-    val name: String,
-    val id: String,
-    val lat: String,
-    val lon: String,
-    val adm2: String,
-    val adm1: String,
-    val country: String,
-    val tz: String,
-    val type: String,
-    val rank: String
+    val name: String,//区/县
+    val id: String,//城市Id
+    val lat: String,//纬度
+    val lon: String,//经度
+    val adm2: String,//当前区/县的上一级  市
+    val adm1: String,//当前市的上一级  省
+    val country: String,//国家
+    val tz: String,//地区/城市所在时区
+    val type: String,//该地区/城市的属性
+    val rank: String//地区评分
 )
