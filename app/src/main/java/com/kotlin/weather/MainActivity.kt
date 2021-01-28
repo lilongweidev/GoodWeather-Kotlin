@@ -1,5 +1,6 @@
 package com.kotlin.weather
 
+import BaseActivity
 import android.Manifest
 import android.animation.Animator
 import android.annotation.SuppressLint
@@ -18,7 +19,7 @@ import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,13 +34,19 @@ import com.kotlin.library.util.*
 import com.kotlin.weather.adapter.DailyAdapter
 import com.kotlin.weather.adapter.HourlyAdapter
 import com.kotlin.weather.adapter.MinutePrecAdapter
+import com.kotlin.weather.adapter.ProvinceAdapter
+import com.kotlin.weather.model.Country
 import com.kotlin.weather.viewmodel.MainViewModel
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.M)
-class MainActivity : AppCompatActivity(), View.OnClickListener,
+class MainActivity : BaseActivity(), View.OnClickListener,
     View.OnScrollChangeListener {
 
     private val TAG = "MainActivity"
@@ -80,7 +87,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //透明状态栏
-        StatusBarUtil.transparencyBar(this)
+        StatusBarUtil.transparencyBar(context)
         //初始化
         initView()
         //检查Android版本
@@ -95,6 +102,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         tvCity.setOnClickListener(this)
         tvPrecDetail.setOnClickListener(this)
         scrollView.setOnScrollChangeListener(this) //指定当前页面，不写则滑动监听无效
+        //初始化城市数据
+        initCityData()
+    }
+
+    /**
+     * 初始化城市数据
+     */
+    private fun initCityData() {
+        //读取城市数据
+        val inputStream = resources.assets.open("City.txt")
+        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+        val stringBuffer = StringBuffer()
+        var lines = bufferedReader.readLine()
+        while (lines != null) {
+            stringBuffer.append(lines)
+            lines = bufferedReader.readLine()
+        }
+
+        val arrayData =  JSONArray(stringBuffer.toString())
+        //循环这个文件数组、获取数组中每个省对象的名字
+        for (i in 0 until arrayData.length()) {
+            val provinceJsonObject: JSONObject = arrayData.getJSONObject(i)
+            val country = Gson().fromJson(provinceJsonObject.toString(), Country::class.java)
+            country.toString().LogD(TAG)
+
+
+            ProvinceAdapter(R.layout.item_city_list, country.province)
+
+        }
 
     }
 
@@ -153,7 +189,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
      */
     private fun startLocation() {
         //实例化mLocationClient
-        mLocationClient = LocationClient(this)
+        mLocationClient = LocationClient(context)
         //注册定位监听
         mLocationClient!!.registerLocationListener(myListener)
         val option = LocationClientOption().apply {
@@ -171,8 +207,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         override fun onReceiveLocation(location: BDLocation) {
             //获取定位所在地的区/县
             val district = location.district
-            //当前页面请求网络与回调
-            mainRequestHelper(district)
+            if (district == null) { //未获取到定位信息，请重新定位
+                "未获取到定位信息，请重新定位".showToast()
+                tvCity.text = "重新定位"
+                tvCity.isEnabled = true //可点击
+                //页面处理
+            } else {
+                tvCity.isEnabled = false //不可点击
+                //在数据请求之前放在加载等待弹窗，返回结果后关闭弹窗
+                showLoadingDialog()
+                //当前页面请求网络与回调
+                mainRequestHelper(district)
+
+                //下拉刷新
+                refresh.setOnRefreshListener {
+                    showLoadingDialog()
+                    //当前页面请求网络与回调
+                    mainRequestHelper(district)
+                }
+            }
         }
 
     }
@@ -262,6 +315,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                 if (minutePrecResponse != null) {
                     //降水预告
                     tvPrecipitation.text = minutePrecResponse.summary
+                    minutelyBean.clear()
                     minutelyBean += minutePrecResponse.minutely
                     val minutePrecAdapter =
                         MinutePrecAdapter(R.layout.item_prec_detail_list, minutelyBean)
@@ -278,6 +332,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             hourlyWeatherLiveData.observe(this@MainActivity, Observer { result ->
                 val hourlyResponse = result.getOrNull()
                 if (hourlyResponse?.hourly != null) {
+                    hourlyBean.clear()
                     hourlyBean += hourlyResponse.hourly
                     val hourlyAdapter = HourlyAdapter(R.layout.item_weather_hourly_list, hourlyBean)
                     val manager = LinearLayoutManager(this@MainActivity)
@@ -293,6 +348,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             dailyWeatherLiveData.observe(this@MainActivity, Observer { result ->
                 val dailyResponse = result.getOrNull()
                 if (dailyResponse != null) {
+                    dailyBean.clear()
                     dailyBean += dailyResponse.daily
                     //当天最高温
                     tvTempHeight.text = "${dailyResponse.daily[0].tempMax}  ℃"
@@ -356,6 +412,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                 } else {
                     "生活指数为空".showToast()
                 }
+                //关闭加载
+                dismissLoadingDialog()
+                //关闭下拉
+                refresh.finishRefresh()
 
             })
 
@@ -416,13 +476,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             height = ViewGroup.LayoutParams.WRAP_CONTENT
             setBackgroundDrawable(ColorDrawable(0x0000))// 设置pop透明效果
             animationStyle = R.style.pop_add// 设置pop出入动画
-            isFocusable =
-                true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
+            isFocusable = true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
             isTouchable = true// 设置pop可点击，为false点击事件无效，默认为true
             isOutsideTouchable = true// 设置点击pop外侧消失，默认为false；在focusable为true时点击外侧始终消失
             showAsDropDown(ivAdd, -100, 0)// 相对于 + 号正下面，同时可以设置偏移量
             setOnDismissListener { toggleBright() }// 设置pop关闭监听，用于改变背景透明度
-            //绑定布局中的控件
             //绑定布局中的控件
             val changeCity  = contentView.findViewById(R.id.tvChangeCity) as TextView //切换城市
             val wallpaper = contentView.findViewById(R.id.tvWallpaper) as TextView//壁纸管理
@@ -433,6 +491,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             val setting = contentView.findViewById(R.id.tvSetting) as TextView//应用设置
 
             changeCity.setOnClickListener {//切换城市
+                //右边抽屉
+                drawerLayout.openDrawer(GravityCompat.END)
                 "切换城市".showToast()
                 dismiss()
             }
@@ -463,6 +523,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         }
     }
+
+
 
     /**
      * 页面滑动监听

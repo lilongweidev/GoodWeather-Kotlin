@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,19 +39,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="城市天气"
-                    android:textColor="#FFF"
-                    android:textSize="@dimen/sp_16" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_18" />
 
                 <!--更多功能-->
                 <ImageView
                     android:id="@+id/ivAdd"
-                    android:layout_marginRight="@dimen/dp_4"
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="@dimen/dp_50"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="right"
-                    android:padding="14dp"
+                    android:layout_marginRight="@dimen/dp_4"
                     android:background="@drawable/selector_bg_img"
+                    android:padding="@dimen/dp_14"
                     android:src="@mipmap/icon_add" />
             </androidx.appcompat.widget.Toolbar>
 
@@ -109,9 +109,9 @@
                                 android:id="@+id/tvWeek"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="16dp"
+                                android:paddingStart="@dimen/dp_16"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="@dimen/sp_16" />
                             <!--温度-->
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                                     android:layout_toRightOf="@+id/tvTemperature"
                                     android:text="℃"
                                     android:textColor="@color/white"
-                                    android:textSize="24sp" />
+                                    android:textSize="@dimen/sp_24" />
                             </RelativeLayout>
                             <!--最高温和最低温-->
                             <LinearLayout
@@ -147,7 +147,7 @@
                                     android:id="@+id/tvTempHeight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="#FFF"
+                                    android:textColor="@color/white"
                                     android:textSize="@dimen/sp_14" />
 
                                 <TextView
@@ -196,12 +196,12 @@
                                     android:layout_height="wrap_content"
                                     android:text="定位中"
                                     android:textColor="@color/white"
-                                    android:textSize="18sp" />
+                                    android:textSize="@dimen/sp_18" />
 
                                 <ImageView
                                     android:id="@+id/ivLocation"
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
+                                    android:layout_width="@dimen/dp_24"
+                                    android:layout_height="@dimen/dp_24"
                                     android:background="@mipmap/icon_location"
                                     android:visibility="gone" />
                             </LinearLayout>
@@ -211,14 +211,14 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp">
+                            android:layout_marginTop="@dimen/dp_20"
+                            android:paddingStart="@dimen/dp_20"
+                            android:paddingEnd="@dimen/dp_20">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:drawableLeft="@mipmap/icon_weather_sun"
+                                android:drawableStart="@mipmap/icon_weather_sun"
                                 android:drawablePadding="@dimen/dp_4"
                                 android:text="Good Weather Kotlin"
                                 android:textColor="@color/white"
@@ -229,7 +229,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="最近更新时间："
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/sp_12" />
@@ -238,10 +238,10 @@
                         <!--分隔线 增加UI效果-->
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_height="@dimen/dp_1"
+                            android:layout_marginLeft="@dimen/dp_20"
+                            android:layout_marginTop="@dimen/dp_8"
+                            android:layout_marginRight="@dimen/dp_20"
                             android:alpha="0.1"
                             android:background="@color/white" />
 
@@ -249,17 +249,17 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp">
+                            android:layout_marginTop="@dimen/dp_8"
+                            android:paddingStart="@dimen/dp_20"
+                            android:paddingEnd="@dimen/dp_20">
 
                             <TextView
                                 android:id="@+id/tvPrecipitation"
-                                android:layout_width="0dp"
+                                android:layout_width="@dimen/dp_0"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:drawableLeft="@mipmap/icon_weather_prec"
-                                android:drawablePadding="4dp"
+                                android:drawablePadding="@dimen/dp_4"
                                 android:text="降水预告"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/sp_12" />
@@ -289,10 +289,10 @@
                         <!--分隔线 增加UI效果-->
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="20dp"
+                            android:layout_height="@dimen/dp_1"
+                            android:layout_marginStart="@dimen/dp_20"
                             android:layout_marginTop="8dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginEnd="@dimen/dp_20"
                             android:alpha="0.1"
                             android:background="@color/white" />
 
@@ -302,7 +302,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:overScrollMode="never"
-                            android:padding="12dp" />
+                            android:padding="@dimen/dp_12" />
 
                         <!--用于显示天气预报数据-->
                         <androidx.recyclerview.widget.RecyclerView
@@ -310,15 +310,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:overScrollMode="never"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingLeft="@dimen/dp_8"
+                            android:paddingRight="@dimen/dp_8" />
 
                         <!--空气质量-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="20dp">
+                            android:padding="@dimen/dp_20">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -326,19 +326,19 @@
                                 android:gravity="center_vertical">
                                 <!--标题-->
                                 <TextView
-                                    android:layout_width="0dp"
+                                    android:layout_width="@dimen/dp_0"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="空气质量"
                                     android:textColor="@color/white"
-                                    android:textSize="18sp" />
+                                    android:textSize="@dimen/sp_18" />
 
                                 <!--更多空气质量信息-->
                                 <TextView
                                     android:id="@+id/tvMoreAir"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:drawableRight="@mipmap/icon_more_blue"
+                                    android:drawableEnd="@mipmap/icon_more_blue"
                                     android:padding="@dimen/dp_4"
                                     android:text="@string/more"
                                     android:textColor="@color/blue_more"
@@ -349,10 +349,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:padding="8dp">
+                                android:padding="@dimen/dp_8">
                                 <!--污染指数 动画展示-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:layout_width="@dimen/dp_0"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center"
@@ -754,15 +754,16 @@
 
     <!--切换城市-->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/ic_drawer_bg"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical">
-
         <RelativeLayout
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -778,8 +779,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="中国"
-                    android:textColor="#000"
-                    android:textSize="16sp" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_18" />
             </androidx.appcompat.widget.Toolbar>
 
             <!--城市列表的返回-->
@@ -790,7 +791,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:padding="15dp"
-                android:src="@mipmap/icon_page_return"
+                android:src="@mipmap/icon_return_white"
                 android:visibility="gone" />
             <!--区/县列表的返回-->
             <ImageView
@@ -800,7 +801,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:padding="15dp"
-                android:src="@mipmap/icon_page_return"
+                android:src="@mipmap/icon_return_white"
                 android:visibility="gone" />
         </RelativeLayout>
 

@@ -5,6 +5,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.TextView
 
+/**
+ * 跑马灯
+ */
 @SuppressLint("AppCompatCustomView")
 class MarqueeTextView : TextView {
     constructor(context: Context?) : super(context) {}
