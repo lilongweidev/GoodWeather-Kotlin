@@ -31,16 +31,12 @@ import com.baidu.location.LocationClient
 import com.baidu.location.LocationClientOption
 import com.google.gson.Gson
 import com.kotlin.library.util.*
-import com.kotlin.weather.adapter.DailyAdapter
-import com.kotlin.weather.adapter.HourlyAdapter
-import com.kotlin.weather.adapter.MinutePrecAdapter
-import com.kotlin.weather.adapter.ProvinceAdapter
-import com.kotlin.weather.model.Country
+import com.kotlin.library.util.Constant.RIGHT
+import com.kotlin.weather.adapter.*
+import com.kotlin.weather.model.CountryData
 import com.kotlin.weather.viewmodel.MainViewModel
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -59,14 +55,16 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
-    //经度
-    private var lon: String = ""
 
-    //纬度
-    private var lat: String = ""
+    private var district: String = ""//区/县
 
-    //区/县  城市id
-    private var cityId: String = ""
+    private var city: String = ""//市
+
+    private var lon: String = ""//经度
+
+    private var lat: String = ""//纬度
+
+    private var cityId: String = ""//区/县  城市id
 
     private var warnBodyString: String? = null //灾害预警数据字符串
 
@@ -119,18 +117,65 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             stringBuffer.append(lines)
             lines = bufferedReader.readLine()
         }
+        val country = Gson().fromJson(stringBuffer.toString(), CountryData::class.java)
+        //显示省
+        val provinceAdapter = ProvinceAdapter(R.layout.item_city_list, country.country)
+        rvChangeCity.layoutManager = LinearLayoutManager(context)
+        rvChangeCity.adapter = provinceAdapter
+        rvChangeCity.showAnimation(RIGHT)
+        provinceAdapter.setOnItemChildClickListener { _, _, position ->
 
-        val arrayData =  JSONArray(stringBuffer.toString())
-        //循环这个文件数组、获取数组中每个省对象的名字
-        for (i in 0 until arrayData.length()) {
-            val provinceJsonObject: JSONObject = arrayData.getJSONObject(i)
-            val country = Gson().fromJson(provinceJsonObject.toString(), Country::class.java)
-            country.toString().LogD(TAG)
+            ivBackCity.visibility = View.VISIBLE
+            //返回省级列表
+            ivBackCity.setOnClickListener {
+                rvChangeCity.adapter = provinceAdapter
+                provinceAdapter.notifyDataSetChanged()
+                ivBackCity.visibility = View.GONE
+                tvChangeCityTitle.text = "中国"
+            }
+            //点击省item
+            //修改标题为省
+            tvChangeCityTitle.text = country.country[position].name
+            val provinceTitle = country.country[position].name
+            //显示市
+            val cityList = country.country[position].city
+            val cityAdapter = CityAdapter(R.layout.item_city_list, cityList)
+            rvChangeCity.adapter = cityAdapter
+            rvChangeCity.showAnimation(RIGHT)
+            //市item点击
+            cityAdapter.setOnItemChildClickListener { _, _, position ->
+                ivBackArea.visibility = View.VISIBLE
+                //返回市列表
+                ivBackArea.setOnClickListener {
+                    rvChangeCity.adapter = cityAdapter
+                    cityAdapter.notifyDataSetChanged()
+                    ivBackArea.visibility = View.GONE
+                    tvChangeCityTitle.text = provinceTitle
+                }
+
+                //修改标题为市
+                tvChangeCityTitle.text = cityList[position].name
+                city = cityList[position].name
+                //显示区/县
+                val areaList = cityList[position].area
+                val areaAdapter = AreaAdapter(R.layout.item_city_list, areaList)
+                rvChangeCity.adapter = areaAdapter
+                rvChangeCity.showAnimation(RIGHT)
+                //区县点击
+                areaAdapter.setOnItemChildClickListener { _, _, position ->
+                    showLoadingDialog()
+                    district = areaList[position]
+                    //请求接口
+                    mainRequestHelper(district)
+                    flag = false //切换城市得到的城市不属于定位，因此这里隐藏定位图标
+                    //关闭抽屉
+                    drawerLayout.closeDrawers()
+                }
 
 
-            ProvinceAdapter(R.layout.item_city_list, country.province)
-
+            }
         }
+
 
     }
 
@@ -206,7 +251,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     inner class MyLocationListener : BDAbstractLocationListener() {
         override fun onReceiveLocation(location: BDLocation) {
             //获取定位所在地的区/县
-            val district = location.district
+            district = location.district
             if (district == null) { //未获取到定位信息，请重新定位
                 "未获取到定位信息，请重新定位".showToast()
                 tvCity.text = "重新定位"
@@ -243,6 +288,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             locationLiveData.observe(this@MainActivity, Observer { result ->
                 val searchCityResponse = result.getOrNull()
                 if (searchCityResponse != null) {
+                    mainViewModel.locationBean.clear()
                     mainViewModel.locationBean += searchCityResponse.location
                     val locationBean = mainViewModel.locationBean[0]
                     cityId = locationBean.id
@@ -289,6 +335,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                     //设置字体
                     tvTemperature.typeface =
                         Typeface.createFromAsset(assets, "fonts/Roboto-Light.ttf")
+                    //控制定位图标是否显示
+                    ivLocation.visibility = if (flag) View.VISIBLE else View.GONE
+
                     //星期
                     tvWeek.text = DateUtils.getWeekOfDate(Date())
                     //天气状况
@@ -476,15 +525,16 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             height = ViewGroup.LayoutParams.WRAP_CONTENT
             setBackgroundDrawable(ColorDrawable(0x0000))// 设置pop透明效果
             animationStyle = R.style.pop_add// 设置pop出入动画
-            isFocusable = true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
+            isFocusable =
+                true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
             isTouchable = true// 设置pop可点击，为false点击事件无效，默认为true
             isOutsideTouchable = true// 设置点击pop外侧消失，默认为false；在focusable为true时点击外侧始终消失
             showAsDropDown(ivAdd, -100, 0)// 相对于 + 号正下面，同时可以设置偏移量
             setOnDismissListener { toggleBright() }// 设置pop关闭监听，用于改变背景透明度
             //绑定布局中的控件
-            val changeCity  = contentView.findViewById(R.id.tvChangeCity) as TextView //切换城市
+            val changeCity = contentView.findViewById(R.id.tvChangeCity) as TextView //切换城市
             val wallpaper = contentView.findViewById(R.id.tvWallpaper) as TextView//壁纸管理
-            val searchCity =contentView.findViewById(R.id.tvSearchCity) as TextView//城市搜索
+            val searchCity = contentView.findViewById(R.id.tvSearchCity) as TextView//城市搜索
             val worldCity = contentView.findViewById(R.id.tvWorldCity) as TextView//世界城市
             val residentCity = contentView.findViewById(R.id.tvResidentCity) as TextView//常用城市
             val aboutUs = contentView.findViewById(R.id.tvAboutUs) as TextView//关于我们
@@ -493,7 +543,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             changeCity.setOnClickListener {//切换城市
                 //右边抽屉
                 drawerLayout.openDrawer(GravityCompat.END)
-                "切换城市".showToast()
                 dismiss()
             }
             wallpaper.setOnClickListener {//壁纸管理
@@ -523,7 +572,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,
 
         }
     }
-
 
 
     /**

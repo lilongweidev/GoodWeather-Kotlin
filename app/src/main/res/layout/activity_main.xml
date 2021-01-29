@@ -790,7 +790,7 @@
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:padding="15dp"
+                android:padding="8dp"
                 android:src="@mipmap/icon_return_white"
                 android:visibility="gone" />
             <!--区/县列表的返回-->
@@ -800,7 +800,7 @@
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:padding="15dp"
+                android:padding="8dp"
                 android:src="@mipmap/icon_return_white"
                 android:visibility="gone" />
         </RelativeLayout>
@@ -808,7 +808,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#EEEEEE" />
+            android:background="@color/white_4" />
 
         <!--数据展示-->
         <androidx.recyclerview.widget.RecyclerView
