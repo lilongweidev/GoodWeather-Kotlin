@@ -2,6 +2,7 @@ package com.kotlin.weather.api
 
 import android.util.Log
 import androidx.lifecycle.liveData
+import com.kotlin.library.util.Constant.SUCCESS
 import com.kotlin.library.util.Constant.SUCCESS_CODE
 import com.kotlin.library.util.LogI
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ object Repository {
             Result.success(searchCityResponse)
         } else {
             //包装一个异常信息
-            Result.failure(RuntimeException("response code is ${searchCityResponse.code}"))
+            Result.failure(RuntimeException("searchCity response code is ${searchCityResponse.code}"))
         }
     }
 
@@ -46,7 +47,7 @@ object Repository {
         if (warningResponse.code == SUCCESS_CODE) {
             Result.success(warningResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${warningResponse.code}"))
+            Result.failure(RuntimeException("nowWarn response code is ${warningResponse.code}"))
         }
     }
 
@@ -59,7 +60,7 @@ object Repository {
         if (nowResponse.code == SUCCESS_CODE) {
             Result.success(nowResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${nowResponse.code}"))
+            Result.failure(RuntimeException("nowWeather response code is ${nowResponse.code}"))
         }
     }
 
@@ -71,7 +72,7 @@ object Repository {
         if (minutePrecResponse.code == SUCCESS_CODE) {
             Result.success(minutePrecResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${minutePrecResponse.code}"))
+            Result.failure(RuntimeException("minutePrec response code is ${minutePrecResponse.code}"))
         }
     }
 
@@ -83,7 +84,7 @@ object Repository {
         if (hourlyResponse.code == SUCCESS_CODE) {
             Result.success(hourlyResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${hourlyResponse.code}"))
+            Result.failure(RuntimeException("hourlyWeather response code is ${hourlyResponse.code}"))
         }
     }
 
@@ -95,7 +96,7 @@ object Repository {
         if (dailyResponse.code == SUCCESS_CODE) {
             Result.success(dailyResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${dailyResponse.code}"))
+            Result.failure(RuntimeException("dailyWeather response code is ${dailyResponse.code}"))
         }
     }
 
@@ -107,7 +108,7 @@ object Repository {
         if (airNowResponse.code == SUCCESS_CODE) {
             Result.success(airNowResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${airNowResponse.code}"))
+            Result.failure(RuntimeException("airNowWeather response code is ${airNowResponse.code}"))
         }
     }
 
@@ -119,7 +120,31 @@ object Repository {
         if (lifestyleResponse.code == SUCCESS_CODE) {
             Result.success(lifestyleResponse)
         } else {
-            Result.failure(RuntimeException("response code is ${lifestyleResponse.code}"))
+            Result.failure(RuntimeException("lifestyle response code is ${lifestyleResponse.code}"))
+        }
+    }
+
+    /**
+     * 必应壁纸
+     */
+    fun biying() = fire(Dispatchers.IO) {
+        val biYingImgResponse = RequestNetwork.biying()
+        if (biYingImgResponse.images.isNotEmpty()) {
+            Result.success(biYingImgResponse)
+        } else {
+            Result.failure(RuntimeException("no data for biying"))
+        }
+    }
+
+    /**
+     * 壁纸列表
+     */
+    fun wallpaper() = fire(Dispatchers.IO) {
+        val wallPaperResponse = RequestNetwork.wallPaper()
+        if (wallPaperResponse.msg == SUCCESS) {
+            Result.success(wallPaperResponse)
+        } else {
+            Result.failure(RuntimeException("wallpaper response code is ${wallPaperResponse.code}"))
         }
     }
 }

@@ -88,4 +88,20 @@ interface ApiService {
      */
     @GET("/v7/indices/1d?key=$API_KEY")
     fun lifestyle(@Query("type") type: String, @Query("location") cityId: String): Call<LifestyleResponse>
+
+    /**
+     * 必应每日一图
+     *
+     * @return BiYingImgResponse 必应壁纸返回
+     */
+    @GET("/HPImageArchive.aspx?format=js&idx=0&n=1")
+    fun biying(): Call<BiYingImgResponse>
+
+    /**
+     * 手机壁纸API
+     *
+     * @return WallPaperResponse 网络壁纸数据返回
+     */
+    @GET("/v1/vertical/vertical?limit=30&skip=180&adult=false&first=0&order=hot")
+    fun getWallPaper(): Call<WallPaperResponse>
 }

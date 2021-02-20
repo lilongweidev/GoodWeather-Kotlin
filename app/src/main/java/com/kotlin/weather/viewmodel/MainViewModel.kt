@@ -8,6 +8,10 @@ import com.kotlin.weather.api.Repository
 import com.kotlin.weather.model.*
 import kotlin.math.ln
 
+/**
+ * 主页面ViewModel
+ * @author llw
+ */
 class MainViewModel : ViewModel() {
 
     //搜索城市

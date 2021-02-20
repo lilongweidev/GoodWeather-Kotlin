@@ -20,6 +20,10 @@ object RequestNetwork {
 
     private val weatherService = ServiceCreator.create(ApiService::class.java)
 
+    private val biyingService = ServiceCreator.create(ApiService::class.java,4)
+
+    private val wallPaperService = ServiceCreator.create(ApiService::class.java,5)
+
     //通过await()函数将searchCity()函数也声明成挂起函数。使用协程  搜索城市
     suspend fun searchCity(location: String) = searchCityService.searchCity(location).await()
 
@@ -43,6 +47,12 @@ object RequestNetwork {
 
     //获取生活质量数据
     suspend fun lifestyle(type: String,cityId: String) = weatherService.lifestyle(type, cityId).await()
+
+    //获取必应壁纸数据
+    suspend fun biying() = biyingService.biying().await()
+
+    //获取每日热门壁纸列表数据
+    suspend fun wallPaper() = wallPaperService.getWallPaper().await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->

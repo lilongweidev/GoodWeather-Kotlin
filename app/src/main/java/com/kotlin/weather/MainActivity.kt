@@ -34,6 +34,8 @@ import com.kotlin.library.util.*
 import com.kotlin.library.util.Constant.RIGHT
 import com.kotlin.weather.adapter.*
 import com.kotlin.weather.model.CountryData
+import com.kotlin.weather.ui.AboutUsActivity
+import com.kotlin.weather.ui.WallPaperActivity
 import com.kotlin.weather.viewmodel.MainViewModel
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_main.*
@@ -76,7 +78,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
 
     private var bgAlpha = 1f
     private var bright = false
-    private val DURATION: Long = 500 //0.5s
+    private val DURATION: Long = 260 //0.5s
     private val START_ALPHA = 0.7f //开始透明度
     private val END_ALPHA = 1f //结束透明度
 
@@ -248,6 +250,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         mLocationClient!!.start()
     }
 
+    /**
+     * 定位监听内部类
+     */
     inner class MyLocationListener : BDAbstractLocationListener() {
         override fun onReceiveLocation(location: BDLocation) {
             //获取定位所在地的区/县
@@ -525,8 +530,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             height = ViewGroup.LayoutParams.WRAP_CONTENT
             setBackgroundDrawable(ColorDrawable(0x0000))// 设置pop透明效果
             animationStyle = R.style.pop_add// 设置pop出入动画
-            isFocusable =
-                true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
+            isFocusable = true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
             isTouchable = true// 设置pop可点击，为false点击事件无效，默认为true
             isOutsideTouchable = true// 设置点击pop外侧消失，默认为false；在focusable为true时点击外侧始终消失
             showAsDropDown(ivAdd, -100, 0)// 相对于 + 号正下面，同时可以设置偏移量
@@ -546,7 +550,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 dismiss()
             }
             wallpaper.setOnClickListener {//壁纸管理
-                "壁纸管理".showToast()
+                startActivity(Intent(context, WallPaperActivity::class.java))
                 dismiss()
             }
             searchCity.setOnClickListener {//城市搜索
@@ -562,7 +566,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 dismiss()
             }
             aboutUs.setOnClickListener {//关于我们
-                "关于我们".showToast()
+                startActivity(Intent(context, AboutUsActivity::class.java))
                 dismiss()
             }
             setting.setOnClickListener {//应用设置

@@ -3,6 +3,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.kotlin.library.R
 import com.kotlin.library.util.LogD
 
@@ -18,6 +19,10 @@ open class BaseActivity : AppCompatActivity() {
         //上下文
         lateinit var context: Activity
     }
+    //快速点击延迟时间
+    private val FAST_CLICK_DELAY_TIME = 500
+    //最后点击时间
+    private var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +57,35 @@ open class BaseActivity : AppCompatActivity() {
             mDialog!!.dismiss()
         }
         mDialog = null
+    }
+
+    /**
+     * 返回
+     *
+     * @param toolbar
+     */
+    protected open fun Back(toolbar: Toolbar) {
+        toolbar.setNavigationOnClickListener {
+            context.finish()
+            if (!isFastClick()) {
+                context.finish()
+            }
+        }
+    }
+
+    /**
+     * 两次点击间隔不能少于500ms
+     *
+     * @return flag
+     */
+    protected open fun isFastClick(): Boolean {
+        var flag = true
+        val currentClickTime = System.currentTimeMillis()
+        if (currentClickTime - lastClickTime >= FAST_CLICK_DELAY_TIME) {
+            flag = false
+        }
+        lastClickTime = currentClickTime
+        return flag
     }
 
 }
