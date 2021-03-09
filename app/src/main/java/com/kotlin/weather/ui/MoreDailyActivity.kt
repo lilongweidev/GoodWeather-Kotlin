@@ -45,7 +45,6 @@ class MoreDailyActivity : BaseActivity() {
             if (cityId != null) {
                 moreDailyWeather(cityId)
             }
-
             //观察天气详情数据返回
             moreDailyWeatherLiveData.observe(this@MoreDailyActivity, Observer { result ->
                 val moreDailyResponse = result.getOrNull()
