@@ -110,8 +110,8 @@ object DateUtils {
      * @return
      */
     @SuppressLint("SimpleDateFormat")
-    fun updateTime(dateTime: String?): String? {
-        var result: String? = null
+    fun updateTime(dateTime: String): String {
+        var result: String
         Log.d("dateTime-->", dateTime + "")
         if (dateTime == null) {
             val sdf = SimpleDateFormat("HH:mm")

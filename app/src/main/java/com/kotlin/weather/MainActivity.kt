@@ -35,7 +35,9 @@ import com.kotlin.library.util.Constant.RIGHT
 import com.kotlin.weather.adapter.*
 import com.kotlin.weather.model.CountryData
 import com.kotlin.weather.ui.AboutUsActivity
+import com.kotlin.weather.ui.MoreDailyActivity
 import com.kotlin.weather.ui.WallPaperActivity
+import com.kotlin.weather.ui.WarnActivity
 import com.kotlin.weather.viewmodel.MainViewModel
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_main.*
@@ -82,6 +84,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     private val START_ALPHA = 0.7f //开始透明度
     private val END_ALPHA = 1f //结束透明度
 
+    private var stationName: String? = null //空气质量站点 查询空气质量站点才需要
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +103,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
      */
     private fun initView() {
         ivAdd.setOnClickListener(this)
+        tvWarn.setOnClickListener(this)
         tvCity.setOnClickListener(this)
+        tvMoreDaily.setOnClickListener(this)
         tvPrecDetail.setOnClickListener(this)
         scrollView.setOnScrollChangeListener(this) //指定当前页面，不写则滑动监听无效
         //初始化城市数据
@@ -293,10 +299,12 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             locationLiveData.observe(this@MainActivity, Observer { result ->
                 val searchCityResponse = result.getOrNull()
                 if (searchCityResponse != null) {
-                    mainViewModel.locationBean.clear()
-                    mainViewModel.locationBean += searchCityResponse.location
+                    locationBean.clear()
+                    locationBean += searchCityResponse.location
                     val locationBean = mainViewModel.locationBean[0]
                     cityId = locationBean.id
+                    stationName = locationBean.adm2 //上级城市 也是空气质量站点
+
                     lon = locationBean.lon
                     lat = locationBean.lat
                     //灾害预警
@@ -487,13 +495,18 @@ class MainActivity : BaseActivity(), View.OnClickListener,
      */
     override fun onClick(v: View) {
         when (v.id) {
-            //更多功能弹窗
-            R.id.ivAdd -> {
+            R.id.ivAdd -> {//更多功能弹窗
                 showAddWindow() //更多功能弹窗
                 toggleBright() //计算动画时间
             }
-            //打开定位
-            R.id.tvCity -> {
+            R.id.tvWarn -> {//灾害预警详情
+                SPUtils.putBoolean(Constant.FLAG_OTHER_RETURN, false, context)
+                val intent = Intent(context, WarnActivity::class.java)
+                intent.putExtra("warnBodyString", warnBodyString)
+                startActivity(intent)
+            }
+
+            R.id.tvCity -> {//打开定位
                 //当用户没有打开GPS定位时，则可以点击这个TextView去打开定位功能，然后进行定位
                 if (isOpenLocationServiceEnable()) { //已开启定位
                     tvCity.text = "定位中"
@@ -505,8 +518,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                     )
                 }
             }
-            //查看分钟降水详情
-            R.id.tvPrecDetail -> {
+            R.id.tvPrecDetail -> {//查看分钟降水详情
                 state = if (state) { //收缩
                     AnimationUtil.collapse(rvPrecDetail, tvPrecDetail)
                     false
@@ -515,6 +527,26 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                     true
                 }
             }
+            R.id.tvMoreDaily -> {//更多天气预报
+                goToMore(MoreDailyActivity::class.java)
+            }
+        }
+    }
+
+    /**
+     * 进入更多数据页面
+     *
+     * @param clazz 要进入的页面
+     */
+    private fun goToMore(clazz: Class<*>) {
+        if (cityId == null) {
+            "很抱歉，未获取到相关更多信息".showToast()
+        } else {
+            val intent = Intent(context, clazz)
+            intent.putExtra("cityId", cityId)
+            intent.putExtra("stationName", stationName) //只要locationId不为空，则cityName不会为空,只判断一次即可
+            intent.putExtra("cityName", tvCity.text.toString())
+            startActivity(intent)
         }
     }
 
@@ -530,7 +562,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             height = ViewGroup.LayoutParams.WRAP_CONTENT
             setBackgroundDrawable(ColorDrawable(0x0000))// 设置pop透明效果
             animationStyle = R.style.pop_add// 设置pop出入动画
-            isFocusable = true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
+            isFocusable =
+                true// 设置pop获取焦点，如果为false点击返回按钮会退出当前Activity，如果pop中有Editor的话，focusable必须要为true
             isTouchable = true// 设置pop可点击，为false点击事件无效，默认为true
             isOutsideTouchable = true// 设置点击pop外侧消失，默认为false；在focusable为true时点击外侧始终消失
             showAsDropDown(ivAdd, -100, 0)// 相对于 + 号正下面，同时可以设置偏移量

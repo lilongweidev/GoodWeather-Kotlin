@@ -62,4 +62,9 @@ object Constant {
      * 音量
      */
     const val VOLUME = "volume"
+
+    /**
+     * 跳转页面的标识
+     */
+    const val FLAG_OTHER_RETURN = "flag_other_return"
 }
