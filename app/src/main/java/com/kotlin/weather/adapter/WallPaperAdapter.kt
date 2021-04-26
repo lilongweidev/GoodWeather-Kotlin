@@ -14,7 +14,7 @@ import com.kotlin.weather.model.VerticalBean
  * @author llw
  * @date 2021/2/19 11:39
  */
-class WallPaperAdapter(layoutResId: Int, data: List<VerticalBean>,var mHeightList: List<Int>) :
+class WallPaperAdapter(layoutResId: Int, data: List<VerticalBean>, private var mHeightList: List<Int>) :
     BaseQuickAdapter<VerticalBean, BaseViewHolder>(layoutResId, data) {
 
     /**

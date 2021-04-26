@@ -21,7 +21,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -59,7 +59,7 @@
                         android:textSize="@dimen/sp_16" />
 
                     <TextView
-                        android:id="@+id/tv_old_time"
+                        android:id="@+id/tvOldTime"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -119,7 +119,7 @@
                                 android:textSize="12sp" />
 
                             <com.kotlin.library.view.LineProgressbar
-                                android:id="@+id/progress_pm10"
+                                android:id="@+id/progressPm10"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -127,7 +127,7 @@
                                 app:progressbar_height="@dimen/dp_10"/>
 
                             <TextView
-                                android:id="@+id/tv_pm10"
+                                android:id="@+id/tvPm10"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -151,7 +151,7 @@
                                 android:textSize="12sp" />
 
                             <com.kotlin.library.view.LineProgressbar
-                                android:id="@+id/progress_pm25"
+                                android:id="@+id/progressPm25"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -159,7 +159,7 @@
                                 app:progressbar_height="@dimen/dp_10"/>
 
                             <TextView
-                                android:id="@+id/tv_pm25"
+                                android:id="@+id/tvPm25"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -195,7 +195,7 @@
                             </LinearLayout>
 
                             <com.kotlin.library.view.LineProgressbar
-                                android:id="@+id/progress_no2"
+                                android:id="@+id/progressNo2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -203,7 +203,7 @@
                                 app:progressbar_height="@dimen/dp_10"/>
 
                             <TextView
-                                android:id="@+id/tv_no2"
+                                android:id="@+id/tvNo2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -239,7 +239,7 @@
                             </LinearLayout>
 
                             <com.kotlin.library.view.LineProgressbar
-                                android:id="@+id/progress_so2"
+                                android:id="@+id/progressSo2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -247,7 +247,7 @@
                                 app:progressbar_height="@dimen/dp_10"/>
 
                             <TextView
-                                android:id="@+id/tv_so2"
+                                android:id="@+id/tvSo2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -282,7 +282,7 @@
                                     android:textSize="8sp" />
                             </LinearLayout>
                             <com.kotlin.library.view.LineProgressbar
-                                android:id="@+id/progress_o3"
+                                android:id="@+id/progressO3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -290,7 +290,7 @@
                                 app:progressbar_height="@dimen/dp_10"/>
 
                             <TextView
-                                android:id="@+id/tv_o3"
+                                android:id="@+id/tvO3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -314,7 +314,7 @@
                                 android:textSize="12sp" />
 
                             <com.kotlin.library.view.LineProgressbar
-                                android:id="@+id/progress_co"
+                                android:id="@+id/progressCo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -322,7 +322,7 @@
                                 app:progressbar_height="@dimen/dp_10"/>
 
                             <TextView
-                                android:id="@+id/tv_co"
+                                android:id="@+id/tvCo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"

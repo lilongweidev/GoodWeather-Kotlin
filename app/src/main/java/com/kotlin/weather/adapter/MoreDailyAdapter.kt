@@ -15,12 +15,11 @@ import com.kotlin.weather.model.DailyBean
  */
 class MoreDailyAdapter(layoutResId: Int, data: List<DailyBean>) :
     BaseQuickAdapter<DailyBean, BaseViewHolder>(layoutResId, data) {
+
     override fun convert(helper: BaseViewHolder, item: DailyBean) {
-
-
         helper.setText(R.id.tv_temp_max, "${item.tempMax}°") //最高温
             .setText(R.id.tv_temp_min, "${item.tempMin}°") //最低温
-            .setText(R.id.tv_date_info, DateUtils.Week(item.fxDate)) //日期描述
+            .setText(R.id.tv_date_info, DateUtils.week(item.fxDate)) //日期描述
             .setText(R.id.tv_date, DateUtils.dateSplit(item.fxDate))//日期
             .setText(R.id.tv_weather_state_d, item.textDay) //白天天气状况文字描述
             .setText(R.id.tv_weather_state_n, item.textNight)//晚间天气状况文字描述

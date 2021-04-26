@@ -34,10 +34,7 @@ import com.kotlin.library.util.*
 import com.kotlin.library.util.Constant.RIGHT
 import com.kotlin.weather.adapter.*
 import com.kotlin.weather.model.CountryData
-import com.kotlin.weather.ui.AboutUsActivity
-import com.kotlin.weather.ui.MoreDailyActivity
-import com.kotlin.weather.ui.WallPaperActivity
-import com.kotlin.weather.ui.WarnActivity
+import com.kotlin.weather.ui.*
 import com.kotlin.weather.viewmodel.MainViewModel
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_main.*
@@ -48,8 +45,6 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : BaseActivity(), View.OnClickListener,
     View.OnScrollChangeListener {
-
-    private val TAG = "MainActivity"
 
     //定位器
     private var mLocationClient: LocationClient? = null
@@ -106,6 +101,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         tvWarn.setOnClickListener(this)
         tvCity.setOnClickListener(this)
         tvMoreDaily.setOnClickListener(this)
+        tvMoreAir.setOnClickListener(this)
         tvPrecDetail.setOnClickListener(this)
         scrollView.setOnScrollChangeListener(this) //指定当前页面，不写则滑动监听无效
         //初始化城市数据
@@ -263,7 +259,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         override fun onReceiveLocation(location: BDLocation) {
             //获取定位所在地的区/县
             district = location.district
-            if (district == null) { //未获取到定位信息，请重新定位
+            if (district == "") { //未获取到定位信息，请重新定位
                 "未获取到定位信息，请重新定位".showToast()
                 tvCity.text = "重新定位"
                 tvCity.isEnabled = true //可点击
@@ -530,6 +526,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             R.id.tvMoreDaily -> {//更多天气预报
                 goToMore(MoreDailyActivity::class.java)
             }
+            R.id.tvMoreAir -> {//更多空气质量预报
+                goToMore(MoreAirActivity::class.java)
+            }
         }
     }
 
@@ -539,7 +538,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
      * @param clazz 要进入的页面
      */
     private fun goToMore(clazz: Class<*>) {
-        if (cityId == null) {
+        if (cityId == "") {
             "很抱歉，未获取到相关更多信息".showToast()
         } else {
             val intent = Intent(context, clazz)

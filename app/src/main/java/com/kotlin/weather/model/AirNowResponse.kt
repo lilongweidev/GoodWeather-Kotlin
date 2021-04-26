@@ -24,3 +24,5 @@ data class NowBean(
     val o3: String//实时 臭氧
 )
 
+
+

@@ -33,11 +33,17 @@ class LineProgressbar : View {
     @SuppressLint("Recycle")
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         val array = getContext().obtainStyledAttributes(attrs, R.styleable.LineProgressbar)
-        mProgressbarWidth = array.getDimension(R.styleable.LineProgressbar_progressbar_width, 100f).toInt()
-        mProgressbarHeight = array.getDimension(R.styleable.LineProgressbar_progressbar_height, 10f).toInt()
+        mProgressbarWidth =
+            array.getDimension(R.styleable.LineProgressbar_progressbar_width, 100f).toInt()
+        mProgressbarHeight =
+            array.getDimension(R.styleable.LineProgressbar_progressbar_height, 10f).toInt()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     /**
      * 测量
@@ -53,28 +59,42 @@ class LineProgressbar : View {
     override fun onDraw(canvas: Canvas) {
         mPaint = Paint()
 
+        mPaint = mPaint?.apply {
+            color = resources.getColor(R.color.arc_bg_color)
+            style = Paint.Style.FILL
+            isAntiAlias = true
+            strokeWidth = mPaintWidth
+        }
         //绘制背景
-        mPaint!!.color = resources.getColor(R.color.arc_bg_color)
-        mPaint!!.style = Paint.Style.FILL
-        mPaint!!.isAntiAlias = true
-        mPaint!!.strokeWidth = mPaintWidth
-        val frameRectF = RectF(mPaintWidth, mPaintWidth,
-            mProgressbarWidth - mPaintWidth, mProgressbarHeight - mPaintWidth)
+        val frameRectF = RectF(
+            mPaintWidth, mPaintWidth,
+            mProgressbarWidth - mPaintWidth, mProgressbarHeight - mPaintWidth
+        )
         canvas.drawRoundRect(frameRectF, 15f, 15f, mPaint!!)
 
         //填充内部进度
-        mPaint!!.pathEffect = null
-        mPaint!!.color = Color.WHITE
-        mPaint!!.style = Paint.Style.FILL
-        mPaint!!.isAntiAlias = true
+        mPaint = mPaint?.apply {
+            pathEffect = null
+            color = Color.WHITE
+            style = Paint.Style.FILL
+            isAntiAlias = true
+        }
         //内部进度填充长度，随动画时间改变而改变
         val percent = mPercent.toFloat() / 100f
-        val progressRectF = RectF(mPaintWidth, mPaintWidth,
-            mPaintWidth + percent * (mProgressbarWidth - 2 * mPaintWidth - 2), mProgressbarHeight - mPaintWidth)
+        val progressRectF = RectF(
+            mPaintWidth,
+            mPaintWidth,
+            mPaintWidth + percent * (mProgressbarWidth - 2 * mPaintWidth - 2),
+            mProgressbarHeight - mPaintWidth
+        )
         canvas.drawRoundRect(progressRectF, 15f, 15f, mPaint!!)
 
         //绘制文字
-        drawPercentageText(canvas,mProgressbarHeight - mPaintWidth,(mProgressbarWidth - mPaintWidth) + 10)
+        drawPercentageText(
+            canvas,
+            mProgressbarHeight - mPaintWidth,
+            (mProgressbarWidth - mPaintWidth) + 10
+        )
 
     }
 
@@ -85,16 +105,13 @@ class LineProgressbar : View {
      * @param rightX  X轴位置
      * @param bottomY Y轴位置
      */
-    private fun drawPercentageText(
-        canvas: Canvas,
-        rightX: Float,
-        bottomY: Float
-    ) {
-        val paint = Paint()
-        paint.isAntiAlias = true
-        paint.color = mTextColor
-        paint.textAlign = Paint.Align.CENTER //设置绘制方式 中心对齐
-        paint.textSize = mTextSize
+    private fun drawPercentageText(canvas: Canvas, rightX: Float, bottomY: Float) {
+        val paint = Paint().apply {
+            isAntiAlias = true
+            color = mTextColor
+            textAlign = Paint.Align.CENTER //设置绘制方式 中心对齐
+            textSize = mTextSize
+        }
         val bounds = Rect()
         paint.getTextBounds(mText, 0, mText!!.length, bounds) //TextView的高度和宽度
         canvas.drawText(mText!!, rightX - bounds.width(), bottomY + 16, paint)

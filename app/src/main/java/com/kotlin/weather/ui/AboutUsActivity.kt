@@ -28,10 +28,8 @@ import java.io.File
  * @author llw
  * @date 2021/2/20 10:32
  */
-@Suppress("DEPRECATION")
 class AboutUsActivity : BaseActivity(), View.OnClickListener {
 
-    private var myClipboard: ClipboardManager? = null
     private var updateUrl: String? = null
     private var updateLog: String? = null
     private var is_update = false
@@ -45,8 +43,6 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
      * 源码地址
      */
     private val GITHUB_URL = "https://github.com/lilongweidev/GoodWeather"
-
-    var updateAppDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,10 +97,9 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
             R.id.tvBlog -> jumpUrl(CSDN_BLOG_URL)
             R.id.tvCode -> jumpUrl(GITHUB_URL)
             R.id.tvCopyEmail -> {
-                myClipboard =
-                    context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                var myClip = ClipData.newPlainText("text", "lonelyholiday@qq.com")
-                myClipboard!!.setPrimaryClip(myClip)
+                val myClipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val myClip = ClipData.newPlainText("text", "lonelyholiday@qq.com")
+                myClipboard.setPrimaryClip(myClip)
                 "邮箱已复制".showToast()
             }
             R.id.tvAuthor -> "你为啥要点我呢？".showToast()
@@ -131,6 +126,8 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
         downloadUrl: String?,
         updateLog: String?
     ) {
+        var updateAppDialog: AlertDialog? = null
+
         val builder = AlertDialog.Builder(context)
             .addDefaultAnimation() //默认弹窗动画
             .setCancelable(true)
@@ -149,7 +146,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
                 updateAppDialog!!.dismiss()
             })
         updateAppDialog = builder.create()
-        updateAppDialog!!.show()
+        updateAppDialog.show()
     }
 
     /**

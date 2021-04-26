@@ -57,7 +57,7 @@ class WarnActivity : BaseActivity() {
         BaseQuickAdapter<WarningBean, BaseViewHolder>(layoutResId, data) {
         @SuppressLint("SetTextI18n")
         override fun convert(helper: BaseViewHolder, item: WarningBean) {
-            val tvTime = helper.getView<TextView>(R.id.tv_time)
+            val tvTime = helper.getView(R.id.tv_time) as TextView
             val time: String = DateUtils.updateTime(item.pubTime)
             tvTime.text = "预警发布时间：${WeatherUtil.showTimeInfo(time)} $time"
 

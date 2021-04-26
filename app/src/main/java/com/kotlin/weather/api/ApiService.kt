@@ -77,6 +77,15 @@ interface ApiService {
     fun airNowWeather(@Query("location") cityId: String): Call<AirNowResponse>
 
     /**
+     * 空气质量5天预报
+     *
+     * @param cityId 城市id
+     * @return 返回空气质量5天预报数据 MoreAirFiveResponse
+     */
+    @GET("/v7/air/5d?key=$API_KEY")
+    fun airFiveWeather(@Query("location") cityId: String): Call<MoreAirFiveResponse>
+
+    /**
      * 生活指数
      *
      * @param type     可以控制定向获取那几项数据 全部数据 0, 运动指数	1 ，洗车指数	2 ，穿衣指数	3 ，

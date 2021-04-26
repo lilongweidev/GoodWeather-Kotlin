@@ -14,16 +14,16 @@ import java.util.*
 object DateUtils {
     var dit = 10
 
+    @SuppressLint("SimpleDateFormat")
+    val defaultSDF = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
     /**
      * 获取当前完整的日期和时间
      * @return 时间
      */
     val nowDateTime: String
         @SuppressLint("SimpleDateFormat")
-        get() {
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            return sdf.format(Date())
-        }
+        get() = defaultSDF.format(Date())
 
     /**
      * 获取当前日期
@@ -52,16 +52,13 @@ object DateUtils {
      * @param date
      * @return
      */
-    fun getYesterday(date: Date?): String {
-        var date = date
-        var tomorrow = ""
+    @SuppressLint("SimpleDateFormat")
+    fun getYesterday(date: Date): String {
         val calendar: Calendar = GregorianCalendar()
         calendar.time = date
         calendar.add(Calendar.DATE, -1)
-        date = calendar.time
         val formatter = SimpleDateFormat("yyyy-MM-dd")
-        tomorrow = formatter.format(date)
-        return tomorrow
+        return formatter.format(calendar.time)
     }
 
     /**
@@ -145,10 +142,10 @@ object DateUtils {
      * @param dateTime
      * @return
      */
-    fun getDayOfWeek(dateTime: String): Int {
-        val cal = Calendar.getInstance()
+    private fun getDayOfWeek(dateTime: String): Int {
+        val calendar = Calendar.getInstance()
         if (dateTime == "") {
-            cal.time = Date(System.currentTimeMillis())
+            calendar.time = Date(System.currentTimeMillis())
         } else {
             val sdf =
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -160,10 +157,10 @@ object DateUtils {
                 e.printStackTrace()
             }
             if (date != null) {
-                cal.time = Date(date.time)
+                calendar.time = Date(date.time)
             }
         }
-        return cal[Calendar.DAY_OF_WEEK]
+        return calendar[Calendar.DAY_OF_WEEK]
     }
 
     /**
@@ -171,75 +168,46 @@ object DateUtils {
      * @param dateTime
      * @return
      */
-    fun Week(dateTime: String): String {
-        var week = ""
-        var yesterday = ""
-        var today = ""
-        var tomorrow = ""
-        yesterday = getYesterday(Date())
-        today = nowDate
-        tomorrow = getTomorrow(Date())
-        if (dateTime == yesterday) {
-            week = "昨天"
-        } else if (dateTime == today) {
-            week = "今天"
-        } else if (dateTime == tomorrow) {
-            week = "明天"
-        } else {
+    fun week(dateTime: String) = when (dateTime) {
+        getYesterday(Date()) -> "昨天"
+        nowDate -> "今天"
+        getTomorrow(Date()) -> "明天"
+        else -> {
             when (getDayOfWeek(dateTime)) {
-                1 -> week = "星期日"
-                2 -> week = "星期一"
-                3 -> week = "星期二"
-                4 -> week = "星期三"
-                5 -> week = "星期四"
-                6 -> week = "星期五"
-                7 -> week = "星期六"
+                1 -> "星期日"
+                2 -> "星期一"
+                3 -> "星期二"
+                4 -> "星期三"
+                5 -> "星期四"
+                6 -> "星期五"
+                7 -> "星期六"
+                else -> ""
             }
         }
-        return week
     }
 
     /**
      * 时间截取
-     * @param date
+     * @param date 例子 2020-08-04
      * @return
      */
-    fun dateSplit(date: String): String { //2020-08-04
-        var result: String? = null
-        val array = date.split("-").toTypedArray()
-        result = array[1] + "/" + array[2]
-        return result
-    }
+    fun dateSplit(date: String) = date.split("-").toTypedArray().let { "${it[1]}/${it[2]}" }
 
     /**
      * 时间截取plus
-     * @param date 时间
+     * @param date 时间  例子 2020-08-07
      * @return
      */
-    fun dateSplitPlus(date: String): String { //2020-08-07
-        var result: String? = null
-        val array = date.split("-").toTypedArray()
-        result = array[1].toInt().toString() + "月" + array[2].toInt() + "号"
-        return result
-    }
+    fun dateSplitPlus(date: String) =
+        date.split("-").toTypedArray().let { "${it[1].toInt()}月${it[2].toInt()}号" }
 
     /**
      * 将时间戳转化为对应的时间(10位或者13位都可以)
      * @param time
      * @return
      */
-    @SuppressLint("SimpleDateFormat")
-    fun formatTime(time: Long): String? {
-        var times: String? = null
-        times = if (time.toString().length > dit) {
-            // 10位的秒级别的时间戳
-            SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                .format(Date(time * 1000))
-        } else { // 13位的秒级别的时间戳
-            SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time)
-        }
-        return times
-    }
+    fun formatTime(time: Long) = if (time.toString().length > dit) defaultSDF.format(Date(time * 1000)) else defaultSDF.format(time)
+
 
     /**
      * 将时间字符串转为时间戳字符串
@@ -250,12 +218,14 @@ object DateUtils {
     fun getStringTimestamp(time: String?): String? {
         var timestamp: String? = null
         try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            val longTime = sdf.parse(time).time / 1000
+            val longTime = defaultSDF.parse(time).time / 1000
             timestamp = java.lang.Long.toString(longTime)
         } catch (e: ParseException) {
             e.printStackTrace()
         }
         return timestamp
     }
+
+
 }
+

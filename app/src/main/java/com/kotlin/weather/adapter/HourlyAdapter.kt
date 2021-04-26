@@ -25,8 +25,7 @@ class HourlyAdapter(layoutResId: Int, data: List<HourlyBean>?) :
             .setText(R.id.tv_temperature, "${item.temp}℃")
 
         //天气状态图片
-        val weatherStateIcon =
-            helper.getView<ImageView>(R.id.iv_weather_state)
+        val weatherStateIcon = helper.getView(R.id.iv_weather_state) as ImageView
         //获取天气状态码，根据状态码来显示图标
         val code: Int = item.icon.toInt()
         changeIcon(weatherStateIcon, code)

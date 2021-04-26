@@ -45,6 +45,9 @@ object RequestNetwork {
     //获取当前城市空气质量
     suspend fun airNowWeather(cityId: String) = weatherService.airNowWeather(cityId).await()
 
+    //获取更多成功空气质量
+    suspend fun airMoreWeather(cityId: String) = weatherService.airFiveWeather(cityId).await()
+
     //获取生活质量数据
     suspend fun lifestyle(type: String,cityId: String) = weatherService.lifestyle(type, cityId).await()
 

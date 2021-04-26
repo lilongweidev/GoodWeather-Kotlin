@@ -18,6 +18,7 @@ class AlertController(
     val window: Window
 ) {
     private var mViewHelper: DialogViewHelper? = null
+
     fun setDialogViewHelper(dialogViewHelper: DialogViewHelper?) {
         mViewHelper = dialogViewHelper
     }

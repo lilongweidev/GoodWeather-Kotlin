@@ -113,6 +113,18 @@ object Repository {
     }
 
     /**
+     * 更多空气质量
+     */
+    fun airMoreWeather(cityId: String) = fire(Dispatchers.IO){
+        val airFiveResponse = RequestNetwork.airMoreWeather(cityId)
+        if(airFiveResponse.code == SUCCESS_CODE){
+            Result.success(airFiveResponse)
+        }else{
+            Result.failure(RuntimeException("airMoreWeather response code is ${airFiveResponse.code}"))
+        }
+    }
+
+    /**
      * 生活质量
      */
     fun lifestyle(type: String, cityId: String) = fire(Dispatchers.IO) {

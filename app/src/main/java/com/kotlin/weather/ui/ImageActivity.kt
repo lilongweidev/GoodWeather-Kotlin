@@ -3,10 +3,8 @@ package com.kotlin.weather.ui
 import BaseActivity
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -26,8 +24,6 @@ import com.kotlin.weather.R
 import com.kotlin.weather.model.WallPaper
 import kotlinx.android.synthetic.main.activity_image.*
 import org.litepal.LitePal.findAll
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -139,14 +135,14 @@ class ImageActivity : BaseActivity(), View.OnClickListener {
     fun getBitMap(url: String?): Bitmap? {
         //新启一个线程进行转换
         Thread(Runnable {
-            var imageurl: URL? = null
+            var imageUrl: URL? = null
             try {
-                imageurl = URL(url)
+                imageUrl = URL(url)
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
             }
             try {
-                val conn = imageurl!!.openConnection() as HttpURLConnection
+                val conn = imageUrl!!.openConnection() as HttpURLConnection
                 conn.doInput = true
                 conn.connect()
                 val inputStream = conn.inputStream

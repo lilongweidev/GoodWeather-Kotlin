@@ -17,7 +17,7 @@ class DailyAdapter(layoutResId: Int, data: MutableList<DailyBean>) :
 
     override fun convert(helper: BaseViewHolder, item: DailyBean) {
         //日期
-        helper.setText(R.id.tv_date,DateUtils.dateSplitPlus(item.fxDate)+DateUtils.Week(item.fxDate))
+        helper.setText(R.id.tv_date,DateUtils.dateSplitPlus(item.fxDate)+DateUtils.week(item.fxDate))
             .setText(R.id.tv_temp_height, item.tempMax + "℃")//最高温
             .setText(R.id.tv_temp_low, " / " + item.tempMin + "℃")//最低温
         //天气状态图片
