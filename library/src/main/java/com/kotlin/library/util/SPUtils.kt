@@ -1,89 +1,38 @@
 package com.kotlin.library.util
 
 import android.content.Context
+import com.kotlin.library.BaseApplication
 
 /**
- * SharedPreferences工具类
+ * SharedPreferences工具类  扩展函数
  *
  * @author llw
- * @date 2021/2/20 15:51
+ * @date 2021/4/14 16:16
  */
-object SPUtils {
-    private val NAME = "config"
+const val NAME = "config"
 
-    fun putBoolean(
-        key: String?,
-        value: Boolean,
-        ctx: Context
-    ) {
-        val sp = ctx.getSharedPreferences(
-            NAME,
-            Context.MODE_PRIVATE
-        )
-        sp.edit().putBoolean(key, value).commit()
-    }
+val context = BaseApplication.context
 
-    fun getBoolean(
-        key: String?,
-        defValue: Boolean,
-        ctx: Context
-    ): Boolean {
-        val sp = ctx.getSharedPreferences(
-            NAME,
-            Context.MODE_PRIVATE
-        )
-        return sp.getBoolean(key, defValue)
-    }
+fun Boolean.putBoolean(key: String) =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit().putBoolean(key, this).apply()
 
-    fun putString(
-        key: String?,
-        value: String?,
-        ctx: Context
-    ) {
-        val sp = ctx.getSharedPreferences(
-            NAME,
-            Context.MODE_PRIVATE
-        )
-        sp.edit().putString(key, value).commit()
-    }
+fun Boolean.getBoolean(key: String): Boolean =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).getBoolean(key, this)
 
-    fun getString(
-        key: String?,
-        defValue: String?,
-        ctx: Context?
-    ): String? {
-        if (ctx != null) {
-            val sp = ctx.getSharedPreferences(
-                NAME,
-                Context.MODE_PRIVATE
-            )
-            return sp.getString(key, defValue)
-        }
-        return ""
-    }
+fun String?.putString(key: String) =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit().putString(key, this).apply()
 
-    fun putInt(key: String?, value: Int, ctx: Context) {
-        val sp = ctx.getSharedPreferences(
-            NAME,
-            Context.MODE_PRIVATE
-        )
-        sp.edit().putInt(key, value).commit()
-    }
+fun String.getString(key: String): String? =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).getString(key, this)
 
+fun Int.putInt(key: String) =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit().putInt(key, this).apply()
 
-    fun getInt(key: String?, defValue: Int, ctx: Context): Int {
-        val sp = ctx.getSharedPreferences(
-            NAME,
-            Context.MODE_PRIVATE
-        )
-        return sp.getInt(key, defValue)
-    }
+fun Int.getInt(key: String): Int =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).getInt(key, this)
 
-    fun remove(key: String?, ctx: Context) {
-        val sp = ctx.getSharedPreferences(
-            NAME,
-            Context.MODE_PRIVATE
-        )
-        sp.edit().remove(key).commit()
-    }
-}
+fun Long.putLong(key: String) =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit().putLong(key, this).apply()
+
+fun Long.getLong(key: String): Long =
+    context.getSharedPreferences(NAME, Context.MODE_PRIVATE).getLong(key, this)

@@ -7,7 +7,8 @@ data class AirNowResponse(
     val code: String,//状态码 200
     val updateTime: String,//当前API更新时间
     val fxLink: String,
-    val now: NowBean
+    val now: NowBean,
+    var station: List<StationBean>
 )
 
 data class NowBean(
@@ -22,6 +23,22 @@ data class NowBean(
     val so2: String,//实时 二氧化硫
     val co: String,//实时 一氧化碳
     val o3: String//实时 臭氧
+)
+
+data class StationBean(
+    val pubTime: String,
+    val name: String,//检测站名
+    val id: String,//id
+    val aqi: String,//空气质量指数
+    val level: String,//等级
+    val category: String,//描述
+    val primary: String,
+    val pm10: String,
+    val pm2p5: String,
+    val no2: String,
+    val so2: String,
+    val co: String,
+    val o3: String
 )
 
 

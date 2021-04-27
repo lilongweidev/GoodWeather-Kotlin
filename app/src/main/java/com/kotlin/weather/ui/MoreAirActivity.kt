@@ -1,6 +1,5 @@
 package com.kotlin.weather.ui
 
-import AirNowResponse
 import BaseActivity
 import NowBean
 import android.annotation.SuppressLint
@@ -8,10 +7,15 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.kotlin.library.util.DateUtils
 import com.kotlin.library.util.StatusBarUtil
 import com.kotlin.library.util.WeatherUtil
+import com.kotlin.library.util.showToast
 import com.kotlin.weather.R
+import com.kotlin.weather.adapter.MoreAirFiveAdapter
+import com.kotlin.weather.adapter.MoreAirStationAdapter
 import com.kotlin.weather.viewmodel.MoreAirViewModel
 import kotlinx.android.synthetic.main.activity_more_air.*
 
@@ -32,7 +36,7 @@ class MoreAirActivity : BaseActivity() {
         setContentView(R.layout.activity_more_air)
 
         StatusBarUtil.transparencyBar(context) //透明状态栏
-        Back(toolbar)
+        back(toolbar)
 
         moreAirRequestHelper()
     }
@@ -61,8 +65,8 @@ class MoreAirActivity : BaseActivity() {
                     val cityId = locationBean.id
                     //查询当前检测站的空气质量
                     airNowWeather(cityId)
-                    airNowLiveData.observe(this@MoreAirActivity, Observer { result ->
-                        val airNowResponse = result.getOrNull()
+                    airNowLiveData.observe(this@MoreAirActivity, Observer { airNowResult ->
+                        val airNowResponse = airNowResult.getOrNull()
                         if (airNowResponse != null) {
                             //截去前面的字符，保留后面所有的字符，就剩下 22:00
                             val time = DateUtils.updateTime(airNowResponse.updateTime)
@@ -70,12 +74,35 @@ class MoreAirActivity : BaseActivity() {
                             tvOldTime.text = "最近更新时间：${WeatherUtil.showTimeInfo(time) + time}"
                             //显示基础数据
                             showAirBasicData(airNowResponse.now)
+                            //配置检测站空气质量显示
+                            rvStation.apply {
+                                layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
+                                onFlingListener = null
+                                PagerSnapHelper().attachToRecyclerView(this)
+                                adapter = MoreAirStationAdapter(R.layout.item_more_air_station_list, airNowStationBean.apply { clear(); this += airNowResponse.station })
+                            }
+                        } else {
+                            "空气质量数据为空".showToast()
                         }
                     })
 
-                    //查询监测站更多空气质量
+                    //查询城市更多空气质量
                     airMoreWeather(cityId)
+                    airMoreLiveData.observe(this@MoreAirActivity, Observer { airMoreResult ->
+                        val moreAirFiveResponse = airMoreResult.getOrNull()
+                        if(moreAirFiveResponse != null){
+                            //配置更多列表
+                            rvFiveAir.apply {
+                                layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
+                                adapter = MoreAirFiveAdapter(R.layout.item_more_air_five_list,airMoreBean.apply { clear();this += moreAirFiveResponse.daily })
+                            }
+                        } else {
+                            "更多空气质量数据为空".showToast()
+                        }
+                    })
 
+                } else {
+                    "搜索不到城市".showToast()
                 }
             })
         }

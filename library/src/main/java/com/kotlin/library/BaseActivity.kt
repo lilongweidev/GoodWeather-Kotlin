@@ -1,6 +1,6 @@
-
 import android.app.Activity
 import android.app.Dialog
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -15,12 +15,14 @@ open class BaseActivity : AppCompatActivity() {
     //加载弹窗
     private var mDialog: Dialog? = null
 
-    companion object{
+    companion object {
         //上下文
         lateinit var context: Activity
     }
+
     //快速点击延迟时间
     private val FAST_CLICK_DELAY_TIME = 500
+
     //最后点击时间
     private var lastClickTime: Long = 0
 
@@ -43,10 +45,15 @@ open class BaseActivity : AppCompatActivity() {
         if (mDialog == null) {
             mDialog = Dialog(context, R.style.loading_dialog)
         }
-        mDialog!!.setContentView(R.layout.dialog_loading)
-        mDialog!!.setCancelable(false)
-        mDialog!!.window!!.setBackgroundDrawableResource(R.color.transparent)
-        mDialog!!.show()
+
+        mDialog?.apply {
+            setContentView(R.layout.dialog_loading)
+            setCancelable(false)
+            window?.setBackgroundDrawableResource(R.color.transparent)
+        }
+        if(!context.isFinishing){
+            mDialog!!.show()
+        }
     }
 
     /**
@@ -64,7 +71,7 @@ open class BaseActivity : AppCompatActivity() {
      *
      * @param toolbar
      */
-    protected open fun Back(toolbar: Toolbar) {
+    protected open fun back(toolbar: Toolbar) {
         toolbar.setNavigationOnClickListener {
             context.finish()
             if (!isFastClick()) {

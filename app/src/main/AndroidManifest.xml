@@ -22,10 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.MoreAirActivity"/>
-        <activity android:name=".ui.MoreDailyActivity"/>
-        <activity android:name=".ui.WarnActivity"/>
+        <activity android:name=".ui.MoreAirActivity" />
+        <activity android:name=".ui.MoreDailyActivity" />
+        <activity android:name=".ui.MoreLifestyleActivity" />
+        <activity android:name=".ui.WarnActivity" />
         <activity android:name=".ui.ImageActivity" />
+        <activity android:name=".ui.SearchCityActivity"/>
         <activity android:name=".ui.AboutUsActivity" />
         <activity
             android:name=".ui.WallPaperActivity"

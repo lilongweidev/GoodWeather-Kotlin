@@ -19,7 +19,6 @@ import com.kotlin.library.view.dialog.AlertDialog
 import com.kotlin.weather.R
 import com.kotlin.weather.model.AppVersion
 import kotlinx.android.synthetic.main.activity_about_us.*
-import org.litepal.LitePal
 import org.litepal.LitePal.find
 import java.io.File
 
@@ -57,7 +56,7 @@ class AboutUsActivity : BaseActivity(), View.OnClickListener {
     private fun initView() {
         //设置状态栏颜色
         StatusBarUtil.setStatusBarColor(context, R.color.about_bg_color)
-        Back(toolbar)
+        back(toolbar)
         layAppVersion.setOnClickListener(this)
         tvBlog.setOnClickListener(this)
         tvCode.setOnClickListener(this)

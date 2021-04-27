@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //multiDexEnabled true
     }
     buildTypes {
         release {
@@ -37,6 +38,7 @@ android {
     packagingOptions {
         exclude 'META-INF/library_release.kotlin_module'
     }
+
 }
 
 dependencies {

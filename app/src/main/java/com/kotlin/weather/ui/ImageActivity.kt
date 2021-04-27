@@ -16,10 +16,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
-import com.kotlin.library.util.Constant
-import com.kotlin.library.util.SPUtils
-import com.kotlin.library.util.StatusBarUtil
-import com.kotlin.library.util.showToast
+import com.kotlin.library.util.*
 import com.kotlin.weather.R
 import com.kotlin.weather.model.WallPaper
 import kotlinx.android.synthetic.main.activity_image.*
@@ -160,9 +157,11 @@ class ImageActivity : BaseActivity(), View.OnClickListener {
             R.id.ivBack -> finish()
             R.id.btnSettingWallpaper -> {
                 //放入缓存
-                SPUtils.putString(Constant.WALLPAPER_URL, wallpaperUrl, context)
+                wallpaperUrl.putString(Constant.WALLPAPER_URL)
+                //SPUtils.putString(Constant.WALLPAPER_URL, wallpaperUrl, context)
                 //壁纸列表
-                SPUtils.putInt(Constant.WALLPAPER_TYPE, 1, context)
+                1.putInt(Constant.WALLPAPER_TYPE)
+                //SPUtils.putInt(Constant.WALLPAPER_TYPE, 1, context)
                 "已设置".showToast()
             }
             R.id.btnDownload -> if(saveBitmapGallery(context, bitmap!!)) "图片保存成功".showToast() else "图片保存失败".showToast()

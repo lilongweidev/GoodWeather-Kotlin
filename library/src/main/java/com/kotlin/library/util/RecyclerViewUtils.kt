@@ -12,7 +12,6 @@ import com.kotlin.library.util.Constant.TOP
 fun RecyclerView.showAnimation(direction:Int){
     val context: Context = context
 
-
     val controller =
         AnimationUtils.loadLayoutAnimation(context, when(direction){
             TOP -> R.anim.layout_animation_from_top

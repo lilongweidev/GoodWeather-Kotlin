@@ -31,7 +31,7 @@ class MoreDailyActivity : BaseActivity() {
         //透明状态栏
         StatusBarUtil.transparencyBar(context)
         showLoadingDialog()
-        Back(toolbar)
+        back(toolbar)
 
         showMoreDailyData()
     }

@@ -101,10 +101,12 @@ class MainViewModel : ViewModel() {
         cityIdLiveData.value = cityId
     }
 
+    //分钟降水
     fun minutePrec(lngLat:String){
         minuteLiveData.value = lngLat
     }
 
+    //逐小时天气
     fun hourlyWeather(cityId: String){
         hourlyLiveData.value = cityId
     }
@@ -123,6 +125,7 @@ class MainViewModel : ViewModel() {
     fun lifestyle(cityId: String) {
         lifeLiveData.value = RequestLifestyleBean("1,2,3,5,6,8,9,10", cityId)
     }
+
 
 
 }

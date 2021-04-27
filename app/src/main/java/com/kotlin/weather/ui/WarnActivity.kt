@@ -1,11 +1,9 @@
 package com.kotlin.weather.ui
 
 import BaseActivity
-import BaseActivity.Companion.context
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -38,7 +36,7 @@ class WarnActivity : BaseActivity() {
     private fun initView() {
         //透明状态栏
         StatusBarUtil.transparencyBar(context)
-        Back(toolbar)
+        back(toolbar)
         val data: WarningResponse = Gson().fromJson(
             intent.getStringExtra("warnBodyString"),
             WarningResponse::class.java

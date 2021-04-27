@@ -67,4 +67,6 @@ object Constant {
      * 跳转页面的标识
      */
     const val FLAG_OTHER_RETURN = "flag_other_return"
+
+    const val LOCATION = "location"
 }

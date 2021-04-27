@@ -344,7 +344,7 @@
 
             <!--国控站点空气质量列表-->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_station"
+                android:id="@+id/rvStation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never" />
@@ -358,7 +358,7 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_five_air"
+                android:id="@+id/rvFiveAir"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_12"

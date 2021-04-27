@@ -33,11 +33,15 @@ import com.google.gson.Gson
 import com.kotlin.library.util.*
 import com.kotlin.library.util.Constant.RIGHT
 import com.kotlin.weather.adapter.*
+import com.kotlin.weather.eventbus.SearchCityEvent
 import com.kotlin.weather.model.CountryData
 import com.kotlin.weather.ui.*
 import com.kotlin.weather.viewmodel.MainViewModel
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -102,10 +106,21 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         tvCity.setOnClickListener(this)
         tvMoreDaily.setOnClickListener(this)
         tvMoreAir.setOnClickListener(this)
+        tvMoreLifestyle.setOnClickListener(this)
         tvPrecDetail.setOnClickListener(this)
         scrollView.setOnScrollChangeListener(this) //指定当前页面，不写则滑动监听无效
         //初始化城市数据
         initCityData()
+
+        EventBus.getDefault().register(this) //注册
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: SearchCityEvent) { //接收
+        //重新加载数据
+        //loadingCommonlyUsedCity()
+        flag = false //切换城市得到的城市不属于定位，因此这里隐藏定位图标
+        mainRequestHelper(event.mLocation)
     }
 
     /**
@@ -124,9 +139,11 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         val country = Gson().fromJson(stringBuffer.toString(), CountryData::class.java)
         //显示省
         val provinceAdapter = ProvinceAdapter(R.layout.item_city_list, country.country)
-        rvChangeCity.layoutManager = LinearLayoutManager(context)
-        rvChangeCity.adapter = provinceAdapter
-        rvChangeCity.showAnimation(RIGHT)
+        rvChangeCity.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = provinceAdapter
+            showAnimation(RIGHT)
+        }
         provinceAdapter.setOnItemChildClickListener { _, _, position ->
 
             ivBackCity.visibility = View.VISIBLE
@@ -144,8 +161,10 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             //显示市
             val cityList = country.country[position].city
             val cityAdapter = CityAdapter(R.layout.item_city_list, cityList)
-            rvChangeCity.adapter = cityAdapter
-            rvChangeCity.showAnimation(RIGHT)
+            rvChangeCity.apply {
+                adapter = cityAdapter
+                showAnimation(RIGHT)
+            }
             //市item点击
             cityAdapter.setOnItemChildClickListener { _, _, position ->
                 ivBackArea.visibility = View.VISIBLE
@@ -163,8 +182,10 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 //显示区/县
                 val areaList = cityList[position].area
                 val areaAdapter = AreaAdapter(R.layout.item_city_list, areaList)
-                rvChangeCity.adapter = areaAdapter
-                rvChangeCity.showAnimation(RIGHT)
+                rvChangeCity.apply {
+                    adapter = areaAdapter
+                    showAnimation(RIGHT)
+                }
                 //区县点击
                 areaAdapter.setOnItemChildClickListener { _, _, position ->
                     showLoadingDialog()
@@ -175,8 +196,6 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                     //关闭抽屉
                     drawerLayout.closeDrawers()
                 }
-
-
             }
         }
 
@@ -288,6 +307,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
     @SuppressLint("SetTextI18n", "NewApi")
     private fun mainRequestHelper(district: String) {
         mainViewModel.apply {
+            showLoadingDialog()
             //发起搜索城市定位请求
             searchCity(district)
 
@@ -484,6 +504,8 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         super.onDestroy()
         wwBig.stop() //停止大风车
         wwSmall.stop() //停止小风车
+        EventBus.getDefault().unregister(this) //解注
+
     }
 
     /**
@@ -496,7 +518,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 toggleBright() //计算动画时间
             }
             R.id.tvWarn -> {//灾害预警详情
-                SPUtils.putBoolean(Constant.FLAG_OTHER_RETURN, false, context)
+                false.putBoolean(Constant.FLAG_OTHER_RETURN)
                 val intent = Intent(context, WarnActivity::class.java)
                 intent.putExtra("warnBodyString", warnBodyString)
                 startActivity(intent)
@@ -529,6 +551,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
             R.id.tvMoreAir -> {//更多空气质量预报
                 goToMore(MoreAirActivity::class.java)
             }
+            R.id.tvMoreLifestyle -> {//更多生活指数数据
+                goToMore(MoreLifestyleActivity::class.java)
+            }
         }
     }
 
@@ -543,7 +568,7 @@ class MainActivity : BaseActivity(), View.OnClickListener,
         } else {
             val intent = Intent(context, clazz)
             intent.putExtra("cityId", cityId)
-            intent.putExtra("stationName", stationName) //只要locationId不为空，则cityName不会为空,只判断一次即可
+            intent.putExtra("stationName", stationName) //只要cityId不为空，则cityName不会为空,只判断一次即可
             intent.putExtra("cityName", tvCity.text.toString())
             startActivity(intent)
         }
@@ -586,7 +611,9 @@ class MainActivity : BaseActivity(), View.OnClickListener,
                 dismiss()
             }
             searchCity.setOnClickListener {//城市搜索
-                "城市搜索".showToast()
+                //城市搜索
+                false.putBoolean(Constant.FLAG_OTHER_RETURN) //缓存标识
+                startActivity(Intent(context, SearchCityActivity::class.java))
                 dismiss()
             }
             worldCity.setOnClickListener {//世界城市

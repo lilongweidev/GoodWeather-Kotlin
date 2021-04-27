@@ -2,6 +2,8 @@ package com.kotlin.weather
 
 import com.baidu.mapapi.CoordType
 import com.baidu.mapapi.SDKInitializer
+import com.iflytek.cloud.SpeechConstant
+import com.iflytek.cloud.SpeechUtility
 import com.kotlin.library.BaseApplication
 import org.litepal.LitePal.initialize
 
@@ -23,6 +25,10 @@ class WeatherApplication:BaseApplication() {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL)
+
+        //配置讯飞语音SDK
+        //配置讯飞语音SDK
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=6018c2cb")
     }
 
 }

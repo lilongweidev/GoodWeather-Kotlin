@@ -1,10 +1,13 @@
 package com.kotlin.weather.viewmodel
 
+import NowBean
+import StationBean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.kotlin.weather.api.Repository
 import com.kotlin.weather.model.LocationBean
+import com.kotlin.weather.model.MoreAirFiveResponse
 
 /**
  * 更多空气数据ViewModel
@@ -23,7 +26,17 @@ class MoreAirViewModel: ViewModel() {
     //更多空气预报  监测站  市级
     private val moreAirLiveData = MutableLiveData<String>()
 
+    //搜索城市返回数据
     val locationBean = ArrayList<LocationBean>()
+
+    //城市当前空气质量数据
+    val airNowBean = ArrayList<NowBean>()
+
+    //城市当前监测站空气质量数据
+    val airNowStationBean = ArrayList<StationBean>()
+
+    //城市更多空气质量数据
+    val airMoreBean = ArrayList<MoreAirFiveResponse.DailyBean>()
 
     //被观察的搜索城市返回数据
     val searchCityLiveData = Transformations.switchMap(searchLiveData) { location ->
